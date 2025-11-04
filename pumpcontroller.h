@@ -34,7 +34,7 @@ public slots:
     void clearConsole();
 
     void openCOMsDialog();
-    void setCOMs(const QString& cond, const QString& pump);
+    void setCOMs(const QString& cond, const QString& pump, ConductivityMeterType meterType = ConductivityMeterType::eDAQ_EPU357);
     void confirmSettings();
     void settingsChanged();
     void setCondFile();
@@ -74,6 +74,7 @@ private:
     //PumpCommandWorker *commandWorker;
     QString pumpComPort;
     QString condComPort;
+    ConductivityMeterType condMeterType;
     //float offset;
     TableModel *tableModel;
     QTimer *runTimer;

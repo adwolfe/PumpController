@@ -11,6 +11,7 @@ PumpController::PumpController(QWidget *parent)
     ui(new Ui::PumpController),
     pumpComPort(""),
     condComPort(""),
+    condMeterType(ConductivityMeterType::eDAQ_EPU357),  // Default to preferred meter
     //offset(0.00),       //
     xPos(-1),            // hides the vLine off the protocol chart
     protocolChanged(1)
@@ -372,9 +373,10 @@ void PumpController::openCOMsDialog()
 }
 
 
-void PumpController::setCOMs(const QString& cond, const QString& pump)
+void PumpController::setCOMs(const QString& cond, const QString& pump, ConductivityMeterType meterType)
 // Need to add timeout to this
 {
+    condMeterType = meterType;
     if (!pump.isEmpty()) {
         pumpComPort = pump;
         writeToConsole("PUMP PORT SELECTED: " + pumpComPort, UiGreen);
@@ -407,12 +409,17 @@ void PumpController::initiateCond()
     }
     if (!condComPort.isEmpty())
     {
-       //qDeb <<"Creating cond";
-        condInterface = new CondInterface(this);
+       //qDebug() << "Creating cond with meter type:" << static_cast<int>(condMeterType);
+        condInterface = new CondInterface(condMeterType, this);
         condInterface->connectToMeter(condComPort);
         connect(condInterface, &CondInterface::measurementReceived,
                 this, &PumpController::receiveCondMeasurement);
         connect(condInterface, &CondInterface::errorOccurred, this, &PumpController::receivePumpError);
+
+        // Log which meter type is being used
+        const char* meterName = (condMeterType == ConductivityMeterType::eDAQ_EPU357) ?
+                                "eDAQ EPU357" : "Thermo Orion EC112";
+        writeToConsole(QString("COND METER: %1").arg(meterName), UiGreen);
     }
 
 }

@@ -1,5 +1,7 @@
 #include "comsdialog.h"
 #include <QSerialPortInfo>
+#include <QLabel>
+#include <QVBoxLayout>
 
 COMsDialog::COMsDialog(QWidget *parent)
     : QDialog(parent)
@@ -15,6 +17,21 @@ COMsDialog::COMsDialog(QWidget *parent)
         QString port = info.portName();
         combo_com_pump->addItem(port);
         combo_com_cond->addItem(port);
+    }
+
+    // Add meter type selector
+    QComboBox *combo_meter_type = new QComboBox(this);
+    combo_meter_type->setObjectName("combo_meter_type");
+    combo_meter_type->addItem("eDAQ EPU357 (Preferred)", static_cast<int>(ConductivityMeterType::eDAQ_EPU357));
+    combo_meter_type->addItem("Thermo Orion EC112 (Legacy)", static_cast<int>(ConductivityMeterType::ThermoOrion_EC112));
+    combo_meter_type->setCurrentIndex(0); // Default to EPU357
+
+    QLabel *label_meter = new QLabel("Conductivity Meter Type:", this);
+
+    // Add to the form layout (assuming there's a formLayout in the UI)
+    // If not, we'll add it to the main layout
+    if (formLayout) {
+        formLayout->addRow(label_meter, combo_meter_type);
     }
 
     connect(combo_com_cond, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &COMsDialog::updatePump);
@@ -37,6 +54,15 @@ void COMsDialog::updatePump()
 
 void COMsDialog::accept()
 {
-    emit coms(combo_com_cond->currentText(), combo_com_pump->currentText());
+    // Get the meter type from the combo box
+    QComboBox *combo_meter_type = findChild<QComboBox*>("combo_meter_type");
+    ConductivityMeterType meterType = ConductivityMeterType::eDAQ_EPU357; // Default
+
+    if (combo_meter_type) {
+        int meterTypeInt = combo_meter_type->currentData().toInt();
+        meterType = static_cast<ConductivityMeterType>(meterTypeInt);
+    }
+
+    emit coms(combo_com_cond->currentText(), combo_com_pump->currentText(), meterType);
     QDialog::accept();
 }

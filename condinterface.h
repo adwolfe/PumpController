@@ -6,23 +6,29 @@
 #include <QSerialPort>
 #include <QThread>
 
-// This particular conductivity meter (Thermo Orion Lab Star EC112) is not great and has very minimal USB connectivity.
-// I can basically only call GETMEAS, which gets a measurement, so that's what I'll be programming!
-// Originally, I had the software set the current time on connect; may add that back.
+// Supports two conductivity meters:
+// 1. Thermo Orion Lab Star EC112 - legacy meter with minimal USB connectivity
+// 2. eDAQ EPU357 USB Conductivity isoPod - preferred meter with full command set
 
 // Simple struct to hold a conductivity measurement
+
+enum class ConductivityMeterType {
+    ThermoOrion_EC112,  // Legacy meter: 9600 baud, limited commands
+    eDAQ_EPU357         // Preferred meter: 115200 baud, rich command set
+};
 
 
 
 class CondInterface : public QObject {
     Q_OBJECT
 public:
-    explicit CondInterface(QObject* parent = nullptr);
+    explicit CondInterface(ConductivityMeterType meterType = ConductivityMeterType::eDAQ_EPU357, QObject* parent = nullptr);
     ~CondInterface();
 
-    bool connectToMeter(const QString &portName, qint32 baudRate = QSerialPort::Baud9600);
+    bool connectToMeter(const QString &portName);
     void getMeasurement();
     void shutdown();
+    ConductivityMeterType getMeterType() const { return meterType; }
 
 public slots:
     void handleCommand(const QString &cmd);
@@ -40,10 +46,15 @@ private slots:
 
 private:
     bool sendToMeter(const QString &cmd);
+    void parseOrionResponse(const QString &response);
+    void parseEPU357Response(const QString &response);
+
     QThread *workerThread;
     CondWorker *condWorker;
     QSerialPort *serial;
     QByteArray serialBuffer;
+    ConductivityMeterType meterType;
+    bool epu357SamplingMode;  // Track if EPU357 is in on-demand sampling mode
 
 };
 
