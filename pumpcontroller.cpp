@@ -637,11 +637,10 @@ void PumpController::startProtocol()
             double end = seg[2];
             writeToConsole(QString::number(duration, 'f', 2)+" min | "+QString::number(start)+" mM | " +QString::number(end)+" mM", UiBlue);
         }
-        // timepoints in seconds. subtract one because we care about time intervals
-        // (e.g. 15 seconds is 31 points, so subtract one to give 15 seconds.
-        // I subtract a second time point too because I skip the first point to sync
-        // with the interval timer.
-        double totalTime = (currProtocol->xvals().count() - 1)*currProtocol->dt()*1000; //
+        // Calculate total protocol duration from the actual end time (last x value)
+        // rather than point count, since segments share boundary points causing duplicates.
+        // xvals are in minutes, convert to milliseconds.
+        double totalTime = currProtocol->xvals().last() * 60.0 * 1000.0;
         //qDebug() << "Total Time: " << totalTime;
 
         // Use a lambda that captures `this`
