@@ -1,8 +1,0 @@
-<Installer>
-    <Name>Pump Controller Qt</Name>
-    <Version>1.0.2</Version>
-    <Title>Install Pump Controller</Title>
-    <Publisher>Aaron Wolfe</Publisher>
-    <StartMenuDir>PumpControllerQt</StartMenuDir>
-    <TargetDir>@RootDir@/PumpControllerQt</TargetDir>
-</Installer>
