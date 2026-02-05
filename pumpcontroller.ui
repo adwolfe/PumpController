@@ -207,7 +207,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Select Log File</string>
+              <string>Save Log File</string>
              </property>
             </widget>
            </item>

@@ -33,16 +33,17 @@ make
 The application communicates with two types of hardware via serial ports:
 
 **PumpInterface** (`pumpinterface.h/cpp`):
-- Manages communication with multiple syringe pumps (New Era NE-1000 or compatible)
+- Manages communication with multiple syringe pumps (New Era NE-1002X or compatible)
 - Uses a command queue system via `PumpCommandWorker` to serialize commands
 - Supports multi-phase protocols with rate, linear ramp, and stop functions
 - Each pump is addressed individually but shares a single serial connection
 - Commands are sent using a specialized protocol defined in `pumpcommands.h`
 
 **CondInterface** (`condinterface.h/cpp`):
-- Communicates with Thermo Orion Lab Star EC112 conductivity meter
+- Supports two conductivity meters via `ConductivityMeterType` enum:
+  - **eDAQ EPU357** (preferred/default): 115200 baud, rich command set, on-demand sampling mode
+  - **Thermo Orion Lab Star EC112** (legacy): 9600 baud, limited GETMEAS command only
 - Uses `CondWorker` for command queuing similar to pump interface
-- Only supports GETMEAS command due to limited USB connectivity of the meter
 - Returns `CondReading` structs containing value, units, and timestamp
 
 Both interfaces use the worker/thread pattern:
@@ -92,6 +93,14 @@ Both interfaces use the worker/thread pattern:
 - Dialog for selecting serial ports for pump and conductivity meter
 - User must configure COM ports before hardware interfaces can connect
 
+### Utilities
+
+**theming.h**:
+- Defines UI color constants (UiGreen, UiRed, UiYellow, UiBlue)
+
+**utils** (`utils.h/cpp`):
+- Utility functions including `findReasonableMinMax()` for data range calculations
+
 ## Key Workflows
 
 ### Starting an Experiment
@@ -139,16 +148,18 @@ The `generatePumpPhases()` method in pumpcontroller.cpp:
 ## Serial Communication Notes
 
 - Pumps use 19200 baud by default
-- Conductivity meter uses 9600 baud
-- Both use command-response pattern requiring queue management
-- Serial buffers in interfaces handle partial message assembly
+- Conductivity meters:
+  - eDAQ EPU357 (default): 115200 baud, newline-terminated responses
+  - Thermo Orion EC112: 9600 baud, '>' terminated responses
+- Both interfaces use command-response pattern requiring queue management
+- Serial buffers handle partial message assembly
 - Timeouts implemented in worker threads to handle non-responsive devices
 
 ## Version Information
 
 Version is defined in the .pro file:
 - VERSION_MAJOR = 1
-- VERSION_MINOR = 0
-- VERSION_BUILD = 2
+- VERSION_MINOR = 2
+- VERSION_BUILD = 0
 
 Access via VERSION macro in code.

@@ -63,7 +63,7 @@ PumpController::PumpController(QWidget *parent)
     // Set default settings for everything
     ui->spinFlowRate->setValue(0.4);
     ui->spinPac->setValue(0);
-    ui->spinPbc->setValue(125);
+    ui->spinPbc->setValue(100);
     ui->spinStraightConc->setMaximum(500); // fix this later, should be = to confirmed PaC
 
     // Disable everything before confirmation
