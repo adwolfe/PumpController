@@ -24,7 +24,7 @@ void CondWorker::initialize() {
 }
 
 void CondWorker::enqueueCommand(const QString &command) {
-    //qDebug() << "enqueueCommand running in thread:" << QThread::currentThread();
+    //qDebug() << "enqueueCommand running in thread:" << QThread::currentThread() << command;
     //qDebug() << "condWorker lives in thread:" << this->thread();
     commandQueue.enqueue(command);
     if (commandQueue.length() > 1)
@@ -37,14 +37,14 @@ void CondWorker::enqueueCommand(const QString &command) {
 }
 
 void CondWorker::processNext() {
-   // qDebug() << "Processing next!";
+    //qDebug() << "Processing next!";
     if (commandQueue.isEmpty()) {
-      //  qDebug() << "nothing to process";
+        //qDebug() << "nothing to process";
         processing = false;
         return;
     }
     QString cmd = commandQueue.dequeue();
-   // qDebug()<<"CondWorker returning command";
+    //qDebug()<<"CondWorker returning command"<<cmd;
     emit condCommandReady(cmd);
     processing = true;
     timeoutTimer->start();

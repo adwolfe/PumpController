@@ -81,31 +81,35 @@ bool CondInterface::connectToMeter(const QString &portName) {
         // Wait a moment for device to be ready
         QThread::msleep(100);
 
+        emit sendCommand("\r");
+
+        QThread::msleep(100);
+
         // Set range to auto (20 mS is good for most applications)
-        emit sendCommand("set range 20 auto\n");
+        emit sendCommand("set range 20 auto\r");
 
         // Optional: Set cell constant if known (uncomment and adjust if needed)
-        // emit sendCommand("set k 1.0\n");
+        emit sendCommand("set k 1.0\r");
 
         // Enter on-demand sampling mode
-        emit sendCommand("sample ascii #\n");
+        emit sendCommand("sample ascii #\r");
         epu357SamplingMode = true;
 
-        qDebug() << "EPU357 initialized in on-demand sampling mode";
+        qDebug() << "EPU357 initialized"; // in on-demand sampling mode";
     } else {
         // Thermo Orion EC112 - legacy meter
         // Optional: Set RTC (currently commented out)
-        //QDateTime now = QDateTime::currentDateTime();
-        //QString command = QString("SETRTC %1-%2-%3-%4-%5-%6-3\r")
-        //                      .arg(now.date().year(), 4, 10, QChar('0'))
-        //                      .arg(now.date().month(), 2, 10, QChar('0'))
-        //                      .arg(now.date().day(), 2, 10, QChar('0'))
-        //                      .arg(now.time().hour(), 2, 10, QChar('0'))
-        //                      .arg(now.time().minute(), 2, 10, QChar('0'))
-        //                      .arg(now.time().second(), 2, 10, QChar('0'));
-        //emit sendCommand(command);
+        QDateTime now = QDateTime::currentDateTime();
+        QString command = QString("SETRTC %1-%2-%3-%4-%5-%6-3\r")
+                              .arg(now.date().year(), 4, 10, QChar('0'))
+                              .arg(now.date().month(), 2, 10, QChar('0'))
+                              .arg(now.date().day(), 2, 10, QChar('0'))
+                              .arg(now.time().hour(), 2, 10, QChar('0'))
+                              .arg(now.time().minute(), 2, 10, QChar('0'))
+                              .arg(now.time().second(), 2, 10, QChar('0'));
+        emit sendCommand(command);
 
-        qDebug() << "Thermo Orion EC112 connected";
+        //qDebug() << "Thermo Orion EC112 connected";
     }
 
     return true;
@@ -117,7 +121,7 @@ void CondInterface::getMeasurement()
     QString cmd;
     if (meterType == ConductivityMeterType::eDAQ_EPU357) {
         // EPU357: Send '#' to trigger a reading in on-demand sampling mode
-        cmd = "#";
+        cmd = "#\r";
     } else {
         // Thermo Orion EC112: Send GETMEAS command
         cmd = "GETMEAS\r";
@@ -127,15 +131,17 @@ void CondInterface::getMeasurement()
 
 bool CondInterface::sendToMeter(const QString &cmd)
 {
-    //qDebug() << "CondInterface sending to serial port";
     QByteArray packet = cmd.toUtf8();
+    //packet = packet.append("\r");
     qint64 bytesWritten = serial->write(packet);
+    //qDebug() << "CondInterface sending to serial port" << packet;
     return bytesWritten == packet.size();
 
 }
 
 void CondInterface::handleReadyRead() {
     serialBuffer.append(serial->readAll());
+    //qDebug() << "Ready to read";
 
     if (meterType == ConductivityMeterType::eDAQ_EPU357) {
         // EPU357 uses newline-terminated responses
@@ -199,7 +205,7 @@ void CondInterface::parseOrionResponse(const QString &response) {
 }
 
 void CondInterface::parseEPU357Response(const QString &response) {
-    //qDebug() << "Parsed EPU357 response:" << response;
+    qDebug() << "Parsed EPU357 response:" << response;
 
     // Ignore prompts
     if (response == "EPU357>") {

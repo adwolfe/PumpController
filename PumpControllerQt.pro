@@ -48,7 +48,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 VERSION_MAJOR = 1
-VERSION_MINOR = 1
+VERSION_MINOR = 2
 VERSION_BUILD = 0
 
 DEFINES += "VERSION_MAJOR=$$VERSION_MAJOR"\
