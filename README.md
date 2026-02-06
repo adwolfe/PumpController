@@ -8,7 +8,7 @@ I originally wrote this program for delivering different salt concentrations to 
 
 Here, I am using two fixed concentrations as input to the system: one tube contains no salt, while the other has some arbitrarily high value (I usually use 100 mM NaCl). I then combine these two proportionally using a static mixer to generate a final delivered concentration. This means I can deliver various concentrations in an analog, rather than digital, manner. This setup affords a lot of flexibility in protocol design, and even allows for introduction of linear changes in salt concentration (as shown in the screenshot). It is not perfect, but it works pretty well! 
 
-Although it was written for salt, you could feasibly use this with any soluble molecule. 
+Although it was written for salt, you could feasibly use this with any soluble molecule. You would want to use some other feedback mechanism besides conductivity to validate your "concentrations" match expectations. I have used low concentrations of fluorescent dyes (e.g. TAMRA) and measured in the background, which works pretty well<sup>2</sup>.
 
 ### System setup
 
@@ -16,13 +16,15 @@ Hardware:
 * 2 NE-1000X or NE-1002X  syringe pumps (New Era)
 * 1 conductivity meter (either a ThermoFisher Orion Star A210, or eDAQ EPU357. The latter is recommended). 
 * 1 Fluidic 1460 Static Mixer (Darwin Microfluidics #CS-10001930; use the 600 um channel)
-* 1 flow-through conductivity meter, small volume
+* 1 flow-through conductivity meter, small volume (see note). 
 * 2 BD syringes, 20 mL
 * PEEK tubing, Tygon tubing, and fittings for making connections.
 
 This software is compatible with both the New Era NE-1000 or NE-1002 models of syringe pumps. You should ideally get two of the same kind. You will need to also purchase the FW-1-X firmware upgrade to be able to use the linear ramp feature of this program, as well as the computer connection system, from New Era.  
 
 *If you purchase the FW-2-X upgrade, it will allow you to create very complex protocols (maximum phases for the pump is 41 in the base or X1 firmware, and 340 for the X2 firmware).*
+
+Note - the conductivity meter was originally purchased from Microelectrodes, Inc in Bedford, NH, but increased pricing for raw materials has led them to retire as of July 2025. The probe I had purchased was [this one](https://web.archive.org/web/20250423040243/https://www.microelectrodes.com/product-page/16-900-flow-thru-conductivity-electrode-with-1-16-fittings). I have not tested alternative small volume conductivity flow cells but thankfully eDAQ sells a [similar one here](https://www.edaq.com/ET916). 
 
 A USB driver for the EPU357 conductivity meter (needed for use with Windows) can be [downloaded from here](https://web.archive.org/web/20240329124720/https://ftdichip.com/wp-content/uploads/2021/08/CDM212364_Setup.zip). 
 
@@ -34,10 +36,10 @@ Connect your pumps and conductivity meter to a PC, ideally the one that runs you
 
 Begin by clicking "Set COM ports" in the top left. Enter the correct COM ports for the pump and conductivity meter, confirm your meter model, and accept. Then, confirm the desired flow rate (I generally use 0.4 ml/min), and concentrations of Pump A and Pump B are correct and click Confirm. This locks the parameters. 
 
-**NOTE** these pumps CANNOT be changed while they are operating. If you ever want to update ANYTHING, you must STOP THE PUMPS first! 
+**NOTE** these pumps cannot be changed while they are operating. If you ever want to update anything, you must STOP the pumps first! 
 
 #### Straight Run
-This feature allows you to choose a desired concentration to flow and run this indefinitely. If you change this, stop the pumps, click update, and then run. I usually use this feature to equilibriate the pumps and flow at a holding concentration prior to an experiment. **You can start an experiment while this feature is operating!**
+This feature allows you to choose a desired concentration to flow and run this indefinitely. If you change this, stop the pumps, click update, and then run. I usually use this feature to equilibriate the pumps and flow at a holding concentration prior to an experiment. **You can start an experiment while this feature is operating!** It allows you to seamlessly transition from the pre-run phase to the experiment without having to stop the pumps. 
 
 #### Segment Builder
 Use this to build out an experiment. You can insert segments of either flat holds or linear gradients. Select a time, a starting concentration for that segment, and an ending concentration. The software will send the correct logic to the pumps to fit chosen paradigm. 
