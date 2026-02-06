@@ -24,7 +24,7 @@ This software is compatible with both the New Era NE-1000 or NE-1002 models of s
 
 *If you purchase the FW-2-X upgrade, it will allow you to create very complex protocols (maximum phases for the pump is 41 in the base or X1 firmware, and 340 for the X2 firmware).*
 
-Note - the conductivity meter was originally purchased from Microelectrodes, Inc in Bedford, NH, but increased pricing for raw materials has led them to retire as of July 2025. The probe I had purchased was [this one](https://web.archive.org/web/20250423040243/https://www.microelectrodes.com/product-page/16-900-flow-thru-conductivity-electrode-with-1-16-fittings). I have not tested alternative small volume conductivity flow cells but thankfully eDAQ sells a [similar one here](https://www.edaq.com/ET916). 
+Note - the conductivity meter was originally purchased from Microelectrodes, Inc in Bedford, NH, but increased pricing for raw materials has led them to retire as of July 2025. The probe I had purchased was [this one](https://web.archive.org/web/20250423040243/https://www.microelectrodes.com/product-page/16-900-flow-thru-conductivity-electrode-with-1-16-fittings). I have not been able to find an alternative. 
 
 A USB driver for the EPU357 conductivity meter (needed for use with Windows) can be [downloaded from here](https://web.archive.org/web/20240329124720/https://ftdichip.com/wp-content/uploads/2021/08/CDM212364_Setup.zip). 
 
