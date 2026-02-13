@@ -49,7 +49,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 VERSION_MAJOR = 1
 VERSION_MINOR = 2
-VERSION_BUILD = 0
+VERSION_BUILD = 1
 
 DEFINES += "VERSION_MAJOR=$$VERSION_MAJOR"\
        "VERSION_MINOR=$$VERSION_MINOR"\
