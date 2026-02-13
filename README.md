@@ -13,18 +13,21 @@ Although it was written for salt, you could feasibly use this with any soluble m
 ### System setup
 
 Hardware: 
-* 2 NE-1000X or NE-1002X  syringe pumps (New Era)
-* 1 conductivity meter (either a ThermoFisher Orion Star A210, or eDAQ EPU357. The latter is recommended). 
-* 1 Fluidic 1460 Static Mixer (Darwin Microfluidics #CS-10001930; use the 600 um channel)
-* 1 flow-through conductivity meter, small volume (see note). 
-* 2 BD syringes, 20 mL
-* PEEK tubing, Tygon tubing, and fittings for making connections.
+* 2x [NE-1000X](https://www.syringepump.com/NE-1000.php) or [NE-1002X](https://www.syringepump.com/Micro.php)  syringe pumps (New Era)
+* 1x [Fluidic 1460 Static Mixer (Darwin Microfluidics #CS-10001930; use the 600 um channel)](https://darwin-microfluidics.com/products/passive-herringbone-mixer-chip-channel-variation-mini-luer)
+* 1x conductivity meter (I've tested with a ThermoFisher Orion Star A210 and eDAQ EPU357. [The latter is recommended](https://www.edaq.com/EPU357). 
+* 1x flow-through conductivity meter, small volume (see note below). 
+* 2x BD syringes, 20 mL (doesn't have to be these but it's what I have tested. You must set the syringe ID on the pumps; check the New Era manual). 
+* 2x 90 mm length of [1/16" PEEK (0.03" inner diameter)](https://www.sigmaaldrich.com/US/en/product/supelco/z226955)
+* 2x [Female Luer fitting for PEEK tubing](https://www.idex-hs.com/store/product-detail/female_luertight_fitting_system_for_1_16_od/p-835)
+* Short lengths of [1/8" OD (1/16" ID) Tygon tubing](https://www.mcmaster.com/6516T11) for connecting the PEEK tubing to the mixer.
+* A microfluidics device for imaging your worms... 
 
-This software is compatible with both the New Era NE-1000 or NE-1002 models of syringe pumps. You should ideally get two of the same kind. You will need to also purchase the FW-1-X firmware upgrade to be able to use the linear ramp feature of this program, as well as the computer connection system, from New Era.  
+This software is compatible with both the New Era NE-1000 or NE-1002 models of syringe pumps. The NE-1002 has a finer step size that makes for smoother linear gradients. You should ideally get two of the same kind. You will need to also purchase the FW-1-X firmware upgrade to be able to use the linear ramp feature of this program, as well as the computer connection system, from New Era. 
 
 *If you purchase the FW-2-X upgrade, it will allow you to create very complex protocols (maximum phases for the pump is 41 in the base or X1 firmware, and 340 for the X2 firmware).*
 
-Note - the conductivity meter was originally purchased from Microelectrodes, Inc in Bedford, NH, but increased pricing for raw materials has led them to retire as of July 2025. The probe I had purchased was [this one](https://web.archive.org/web/20250423040243/https://www.microelectrodes.com/product-page/16-900-flow-thru-conductivity-electrode-with-1-16-fittings). I have not been able to find an alternative. 
+Note - the conductivity meter was originally purchased from Microelectrodes, Inc in Bedford, NH, but increased pricing for raw materials has led them to retire as of July 2025. The probe I had purchased was [this one](https://web.archive.org/web/20250423040243/https://www.microelectrodes.com/product-page/16-900-flow-thru-conductivity-electrode-with-1-16-fittings). I have not been able to find an alternative. I will update this if I can find one. 
 
 A USB driver for the EPU357 conductivity meter (needed for use with Windows) can be [downloaded from here](https://web.archive.org/web/20240329124720/https://ftdichip.com/wp-content/uploads/2021/08/CDM212364_Setup.zip). 
 
