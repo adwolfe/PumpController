@@ -4,9 +4,8 @@ authors:
 - family-names: "Wolfe"
   given-names: "Aaron"
   orcid: https://orcid.org/0000-0002-4926-5064
-title: "adwolfe/PumpController: v1.2.1_Zenodo"
+title: "Pump Controller"
 version: v1.2.1
 doi: 10.5281/zenodo.18633310
 date-released: 2026-02-13
-url: "https://github.com/adwolfe/pumpcontroller"
                               
